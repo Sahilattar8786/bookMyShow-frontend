@@ -1,8 +1,26 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 
-export const login=createAsyncThunk(
-    'user/login', async()=>{
+
+export const LogInUser=createAsyncThunk(
+    'user/login',  async ({ email, password }, { rejectWithValue }) => {
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            const response = await axios.post('http://localhost:7000/api/users/login', { email, password }, config);
+            return response.data;
+        } catch (error) {
+            // If the API call fails, include the error message in the rejected action payload
+            return rejectWithValue(error.response.data);
+        }
+    }
+)
+export const SignUp=createAsyncThunk(
+    'user/signup', async()=>{
 
     }
 )
@@ -15,23 +33,44 @@ const initialState={
 const userSlice=createSlice({
     name:'userInfo',
     initialState:initialState,
+    reducers:{
+        LogOut(state){
+            state.loading=false
+            state.data=[]
+            state.error=''
+        }
+    },
     extraReducers:(builder)=>{
         builder
-        .addCase(login.pending,(state,action)=>{
+        .addCase(LogInUser.pending,(state,action)=>{
             state.loading=true
         })
-        .addCase(login.fulfilled,(state,action)=>{
+        .addCase(LogInUser.fulfilled,(state,action)=>{
+            state.loading=false
+            state.data=action.payload
+        })
+        .addCase(LogInUser.rejected,(state,action)=>{
+            state.loading=false
+            state.error = action.payload.error
+
+        })
+        .addCase(SignUp.pending,(state,action)=>{
+            state.loading=true
+        })
+        .addCase(SignUp.fulfilled,(state,action)=>{
             state.loading=false
             state.data=action.payload
             state.error=''
         })
-        .addCase(login.rejected,(state,action)=>{
+        .addCase(SignUp.rejected,(state,action)=>{
             state.loading=false
             state.data=[]
             state.error=action.error.message
         })
     }
+
 })
 
 
 export default userSlice.reducer;
+export const {LogOut}=userSlice.actions;

@@ -2,10 +2,11 @@ import { AppBar, Container, IconButton, Toolbar,Menu ,Typography, Box, Button ,M
 import React, { useState } from 'react'
 import MovieIcon from '@mui/icons-material/Movie';
 import MenuIcon from '@mui/icons-material/Menu'
+import { useSelector } from 'react-redux';
 export default function Navbar() {
-  const userinfo=true;
   const [anchorElNav,setAnchorElNav]=useState(null);
   const [anchorElUser,setAnchorElUser]=useState(null);
+  const userInfo=useSelector(state=>state.user.data);
   
   const handleOpneNavMenu=(event)=>{
     setAnchorElNav(event.currentTarget)
@@ -20,8 +21,8 @@ export default function Navbar() {
     setAnchorElUser(null)
   }
   const pages = ['Movies', 'Theater', 'Shows'];
-  const settings = ['Profile', 'My Tickets', 'Logout'];
-
+  const settings = ['Profile', 'My Tickets', ];
+ 
 
   return (
     <AppBar position='static'>
@@ -118,13 +119,13 @@ export default function Navbar() {
                 </Button>
               ))}
             </Box>
-            {userinfo &&(
+            {userInfo && userInfo.pic &&(
              <Box sx={{
               flexGrow:0
              }}>
               <Tooltip title="Open Setting">
                   <IconButton onClick={handleOpneUserMenu} sx={{p:0}}>
-                     <Avatar></Avatar>
+                     <Avatar src={userInfo.pic}></Avatar>
                   </IconButton>
               </Tooltip>
               <Menu
@@ -148,6 +149,11 @@ export default function Navbar() {
                      <Typography textAlign='center'>{setting}</Typography>
                   </MenuItem>
                 ))}
+                 <MenuItem key="">
+                  <Typography textAlign='center'>
+                     Logout
+                  </Typography>
+                 </MenuItem>
 
               </Menu>
              </Box>)

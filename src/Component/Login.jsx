@@ -1,7 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Stack, TextField, Button, Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
-const Login = () => {
+import { useDispatch } from 'react-redux';
+import { LogInUser } from '../app/Slice/userSlice';
+import { useNavigate } from'react-router-dom';
+import { ToastContainer,toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+export default function  LogIn  ()  {
+   const [email,setEmail]=useState('');
+   const [password,setPassword]=useState('');
+   const dispatch=useDispatch();
+   const navigate=useNavigate();
+   const error=useSelector(state=>state.user.error)
+   
+   const LogIn=(email,password)=>{
+    console.log(email,password)
+    dispatch(LogInUser({ email, password })).then(() => {
+        toast.success('Login Succesfull',{
+            position: "top-right",
+            autoClose:1000,
+            onClose: () => navigate('/movie')
+          }) 
+    }).catch((error)=>{
+          toast.error(error,{
+            position:'top-right',
+            autoClose:1000
+          })
+       }
+    )
+   }
+    console.log(error)
     return (
         <Box
             display="flex"
@@ -24,9 +52,9 @@ const Login = () => {
                         Login
                     </Typography>
                     <Stack spacing={2}  width="100%">
-                        <TextField label="Email" variant="outlined" fullWidth />
-                        <TextField label="Password" variant="outlined" type="password" fullWidth />
-                        <Button variant="contained" color="primary" fullWidth>
+                        <TextField label="Email" variant="outlined" onChange={(e)=>setEmail(e.target.value)} fullWidth />
+                        <TextField label="Password" variant="outlined" type="password" onChange={(e)=>setPassword(e.target.value)} fullWidth />
+                        <Button variant="contained" color="primary" fullWidth onClick={()=>LogIn(email,password)}>
                             Login
                         </Button>
                         <Link href="#" variant="body2" align="center">
@@ -38,39 +66,9 @@ const Login = () => {
                     </Stack>
                 </Box>
             </Paper>
+            <ToastContainer />
         </Box>
     );
 };
 
 
-const Login1=()=>{
-    return(
-    <Box
-     display="flex"
-     justifyContent='center'
-     alignItems='center'
-     height='100vh'
-     sx={{ backgroundColor: '#f5f5f5' }}
-    >
-        <Paper elevation={3} sx={{
-            p:4 ,
-            borderRadius:2,
-            width:400
-        }}>
-           <Box display="flex" flexDirection="column" alignItems="center">
-              <Typography variant="h4" color="primary" fontWeight={700}>Login</Typography>
-              <Stack spacing={2} width="100%" mt={2}>
-                <TextField label="Email" variant='outlined' fullWidth></TextField>
-                <TextField label="Password" variant='outlined' fullWidth></TextField>
-                <Button variant='contained' color='primary' fullWidth>Login</Button>
-                <Link href="#" variant="body2" align="center">Forgot password?</Link>
-                <Typography variant="body2" color="primary">
-                    Don't have an account? <Link href="">Sign Up</Link>
-                </Typography>
-              </Stack>
-           </Box>
-        </Paper>
-    </Box>
-    )
-}
-export default Login;
