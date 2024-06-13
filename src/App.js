@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Show from './Component/Show/Show';
 import Theater from './Component/Theater/Theater';
 import ShowMovie from './Component/Movie/ShowMovie';
+import ShowDetail from './Component/Show/ShowDetail';
 function App() {
   return (
     <div className="App">
@@ -17,9 +18,11 @@ function App() {
           <Route path="/" element={<LogIn/>} />
           <Route path="/signup" element={<SignUp/>} />
           <Route path='/movie' element={<Protect><Navbar/><Movies/></Protect>}></Route>
-          <Route path="/show" element={<Protect><Navbar/><Show/></Protect>}></Route>
-          <Route path='theater' element={<><Navbar/><Theater/></>}></Route>
           <Route path='/MovieDetail/:id' element={<><Navbar/><ShowMovie/></>} ></Route>
+          <Route path="/show" element={<Protect><Navbar/><Show/></Protect>}></Route>
+          <Route path='/showDetail/:id' element={<><Navbar/><ShowDetail/></>} ></Route>
+          <Route path='theater' element={<><Navbar/><Theater/></>}></Route>
+       
           <Route path="*" element={<h1>404 Not Found</h1>}></Route>
 
         </Routes>

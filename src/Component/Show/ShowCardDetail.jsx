@@ -1,14 +1,19 @@
 import { Card, CardMedia,Stack ,Box, CardContent, Typography,Grid, Button } from '@mui/material'
 import React from 'react'
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 export default function ShowCardDetail({show}) {
-  const {  movie, theater, showTime, seatsAvailable, price} =show ; 
+  const { _id,movie, theater, showTime, seatsAvailable, price} =show ; 
+  const navigate=useNavigate()
   return (
     <Card sx={{
         display:'block',
         flexDirection:'row',
         maxWidth:800
-    }}>
+    }}
+     key={_id}
+     onClick={()=>navigate(`/showDetail/${_id}`)}
+    >
       <CardMedia 
         component="img"
         alt="Contemplative Reptile"
@@ -55,9 +60,6 @@ export default function ShowCardDetail({show}) {
          }}>
             <Button variant='contained' color='primary' sx={{m:1}}>
                 Book Tickets
-            </Button>
-            <Button variant='contained' color='primary' sx={{m:1}}>
-                View Details
             </Button>
          </Box>
         </CardContent>

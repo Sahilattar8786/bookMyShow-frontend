@@ -10,7 +10,7 @@ export default function TheaterCard({ theatre }) {
       <CardContent>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="subtitle" color="text.secondary">
               {address}, {city}, {state} - {pincode}
             </Typography>
           </Grid>

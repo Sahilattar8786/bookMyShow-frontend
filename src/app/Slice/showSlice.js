@@ -38,6 +38,24 @@ export const searchSHow=createAsyncThunk(
     }
 )
 
+//fetch show Detail
+export const fetchShowData=createAsyncThunk(
+    'fetch/showDetail',async(id)=>{
+        try{
+            const config={
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            }
+            const response =await axios.post(`http://localhost:7000/api/shows/show/${id}`,config);
+            return response.data;
+        }
+        catch(error){
+            return error.response.data;
+        }
+    }
+)
+
  
 
 const showSlice=createSlice({
@@ -45,6 +63,7 @@ const showSlice=createSlice({
     initialState:{
         loading:false,
         shows:[],
+        selectedShow:[],
         error:''
 
     },
@@ -73,6 +92,19 @@ const showSlice=createSlice({
         })
         .addCase(searchSHow.rejected,(state,action)=>{
             state.loading=false;
+            state.error=action.payload? action.payload.error : 'Something went wrong';
+        })
+        .addCase(fetchShowData.pending,(state)=>{
+             state.loading=true;
+        })
+        .addCase(fetchShowData.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.selectedShow=action.payload;
+            state.error=""
+        })
+        .addCase(fetchShowData.rejected,(state,action)=>{
+            state.loading=false;
+            state.selectedShow=[];
             state.error=action.payload? action.payload.error : 'Something went wrong';
         })
 
