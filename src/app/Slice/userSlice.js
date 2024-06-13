@@ -48,13 +48,14 @@ const userSlice=createSlice({
         .addCase(LogInUser.fulfilled,(state,action)=>{
             state.loading=false
             state.data=action.payload
+            state.error=''
         })
         .addCase(LogInUser.rejected,(state,action)=>{
             state.loading=false
             state.error = action.payload.error
 
         })
-        .addCase(SignUp.pending,(state,action)=>{
+        .addCase(SignUp.pending,(state)=>{
             state.loading=true
         })
         .addCase(SignUp.fulfilled,(state,action)=>{

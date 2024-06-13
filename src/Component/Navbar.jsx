@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import MovieIcon from '@mui/icons-material/Movie';
 import MenuIcon from '@mui/icons-material/Menu'
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 export default function Navbar() {
   const [anchorElNav,setAnchorElNav]=useState(null);
   const [anchorElUser,setAnchorElUser]=useState(null);
@@ -20,9 +22,15 @@ export default function Navbar() {
   const handleCloseUserMenu=(event)=>{
     setAnchorElUser(null)
   }
-  const pages = ['Movies', 'Theater', 'Shows'];
+  // const pages = ['Movies', 'Theater', 'Shows'];
+  const pages = [
+    { name: "Movies", path: 'movie' },
+    { name: 'Show', path: 'show' },
+    { name: 'Theater', path: 'theater' }
+  ];
   const settings = ['Profile', 'My Tickets', ];
  
+  const navigate=useNavigate();
 
   return (
     <AppBar position='static'>
@@ -92,8 +100,8 @@ export default function Navbar() {
                >
                 {
                   pages.map((page)=>(
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                       <Typography textAlign="center">{page}</Typography>
+                    <MenuItem key={page.name} onClick={()=>navigate(`/${page.path}`)}>
+                       <Typography textAlign="center">{page.name}</Typography>
                     </MenuItem>
                   ))
                 }
@@ -108,14 +116,15 @@ export default function Navbar() {
             }}>
               {pages.map((page)=>(
                 <Button
-                  key={page}
+                  key={page.name}
                   sx={{
                     my:2 ,
                     color:'white',
                     display:'block'
                   }}
+                  onClick={()=>navigate(`/${page.path}`)}
                 >
-                  {page}
+                  {page.name}
                 </Button>
               ))}
             </Box>
