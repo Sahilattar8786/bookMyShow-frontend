@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, Grid, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTheatre } from '../../app/Slice/theatreSlice';
+import { fetchTheatre,searchTheatre } from '../../app/Slice/theatreSlice';
 import TheaterCard from './TheaterCard';
-
+  
 export default function Theater() {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const theatreData = useSelector(state => state.theater.theatres);
-
+  const session = sessionStorage.getItem('userInfo');
   useEffect(() => {
     dispatch(fetchTheatre());
   }, [dispatch]);
 
   const handleSearch = () => {
     console.log(searchQuery);
-    // dispatch(searchTheater(searchQuery));
+    dispatch(searchTheatre(searchQuery));
   };
-
+  console.log(session);
   return (
     <Box sx={{ display: 'block', alignItems: 'center', m: 5 }}>
       <Box

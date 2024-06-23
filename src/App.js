@@ -10,6 +10,8 @@ import Show from './Component/Show/Show';
 import Theater from './Component/Theater/Theater';
 import ShowMovie from './Component/Movie/ShowMovie';
 import ShowDetail from './Component/Show/ShowDetail';
+import TheaterDetail from './Component/Theater/TheaterDetail';
+import BookingPage from './Component/booking/booking';
 function App() {
   return (
     <div className="App">
@@ -22,7 +24,8 @@ function App() {
           <Route path="/show" element={<Protect><Navbar/><Show/></Protect>}></Route>
           <Route path='/showDetail/:id' element={<><Navbar/><ShowDetail/></>} ></Route>
           <Route path='theater' element={<><Navbar/><Theater/></>}></Route>
-       
+          <Route path='/theatreDetail/:id' element={<><Navbar/><TheaterDetail/></>}></Route>
+          <Route path="/booking/:showId" element={<BookingPage/>}></Route>
           <Route path="*" element={<h1>404 Not Found</h1>}></Route>
 
         </Routes>

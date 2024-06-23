@@ -47,7 +47,7 @@ export const fetchShowData=createAsyncThunk(
                     'Content-Type':'application/json'
                 }
             }
-            const response =await axios.post(`http://localhost:7000/api/shows/show/${id}`,config);
+            const response =await axios.get(`http://localhost:7000/api/shows/${id}`,config);
             return response.data;
         }
         catch(error){

@@ -47,7 +47,7 @@ export default function Show() {
   {showData && showData.length > 0 ? (
     showData.map((i) => (
       <Grid item xs={12} sm={6} md={4} lg={3} key={i._id}>
-        <ShowCardDetail show={i} />
+        <ShowCardDetail show={i}  />
       </Grid>
     ))
   ) : (

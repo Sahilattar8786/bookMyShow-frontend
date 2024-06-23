@@ -15,21 +15,34 @@ export default function  LogIn  ()  {
    const error1=useSelector(state=>state.user.error)
    const loading=useSelector(state=>state.user.loading);
    
-   const handleLogin=(email,password)=>{
-     console.log(email,password) 
-     dispatch(LogInUser({email,password})).then((response)=>{
+   const handleLogin = (email, password) => {
+    console.log(email, password);
+    
+    dispatch(LogInUser({email, password}))
+      .then(() => {
         toast.success('Login Successful', {
-          position: "top-right",
-          autoClose: 1000,
-          onClose: () => navigate('/movie')
-        });
-     }).catch((error)=>{
-        toast.error(error1, { // Use error.message if available
           position: 'top-right',
-          autoClose: 1000
+          autoClose: 5000,
+          onClose: () => navigate('/movie'),
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
         });
-     })
-   }
+      })
+      .catch(() => {
+        toast.error('Login Failed', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
+  
     return (
         <Box
             display="flex"

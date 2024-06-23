@@ -58,7 +58,7 @@ export default function ShowCardDetail({show}) {
             spacing:2,
             justifyContent:'center',
          }}>
-            <Button variant='contained' color='primary' sx={{m:1}}>
+            <Button variant='contained' color='primary' sx={{m:1}} onClick={()=>navigate(`/booking/${_id}`)}>
                 Book Tickets
             </Button>
          </Box>

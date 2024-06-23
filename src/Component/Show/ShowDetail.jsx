@@ -2,7 +2,7 @@ import { Box, Card, CardMedia, Button, Paper, Typography, Divider } from '@mui/m
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchShowData } from '../../app/Slice/showSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import moment from 'moment';
 
@@ -10,14 +10,14 @@ export default function ShowDetail() {
   const { id } = useParams();
   const showData = useSelector(state => state.show.selectedShow);
   const dispatch = useDispatch();
-
+  const navigate=useNavigate();
   useEffect(() => {
     dispatch(fetchShowData(id));
   }, [dispatch, id]);
 
   // If showData or showData.movie is not yet available, render a loading state
   if (!showData || !showData.movie || showData.movie.length === 0) {
-    return <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>Loading...</Typography>;
+    return <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }} >Loading...</Typography>;
   }
 
   return (
@@ -175,6 +175,7 @@ export default function ShowDetail() {
                 justifyContent: 'center', // Centers the content horizontally
                 alignItems: 'center', // Centers the content vertically
               }}
+              onClick={()=>navigate(`/booking/${showData._id}`)}
             >
               Book Ticket
             </Button>
