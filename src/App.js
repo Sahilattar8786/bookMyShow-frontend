@@ -12,6 +12,7 @@ import ShowMovie from './Component/Movie/ShowMovie';
 import ShowDetail from './Component/Show/ShowDetail';
 import TheaterDetail from './Component/Theater/TheaterDetail';
 import BookingPage from './Component/booking/booking';
+import TicketsList from './Component/booking/MyTicket';
 function App() {
   return (
     <div className="App">
@@ -24,8 +25,9 @@ function App() {
           <Route path="/show" element={<Protect><Navbar/><Show/></Protect>}></Route>
           <Route path='/showDetail/:id' element={<><Navbar/><ShowDetail/></>} ></Route>
           <Route path='theater' element={<><Navbar/><Theater/></>}></Route>
-          <Route path='/theatreDetail/:id' element={<><Navbar/><TheaterDetail/></>}></Route>
-          <Route path="/booking/:showId" element={<BookingPage/>}></Route>
+          <Route path='/theatreDetail/:id' element={<Protect><Navbar/><TheaterDetail/></Protect>}></Route>
+          <Route path="/booking/:showId" element={<Protect><Navbar/><BookingPage/></Protect>}></Route>
+          <Route path="/myTicket" element={<Protect><Navbar/><TicketsList/></Protect>}></Route>
           <Route path="*" element={<h1>404 Not Found</h1>}></Route>
 
         </Routes>

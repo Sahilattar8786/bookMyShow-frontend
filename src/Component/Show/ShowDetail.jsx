@@ -167,7 +167,6 @@ export default function ShowDetail() {
             <Button
               variant="contained"
               color="primary"
-              href={showData.movie[0].trailer}
               target="_blank"
               endIcon={<BookOnlineIcon />}
               sx={{

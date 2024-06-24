@@ -104,7 +104,7 @@ const showSlice=createSlice({
         })
         .addCase(fetchShowData.rejected,(state,action)=>{
             state.loading=false;
-            state.selectedShow=[];
+            state.selectedShow=null;
             state.error=action.payload? action.payload.error : 'Something went wrong';
         })
 

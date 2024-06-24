@@ -5,50 +5,48 @@ import { Box, Button, Typography } from '@mui/material';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import axios from 'axios';
 import { fetchShowData } from '../../app/Slice/showSlice';
-
+import { createBooking } from '../../app/Slice/bookingSlice';
+import { toast,ToastContainer } from 'react-toastify';
 export default function BookingPage() {
   const { showId } = useParams();
   const dispatch = useDispatch();
-  const userId = useSelector(state => state.user.id); // Assume user ID is stored in state.user.id
+  const userId = useSelector(state => state.user.data._id); // Assume user ID is stored in state.user.id
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [seats, setSeats] = useState([]);
   const [showDetails, setShowDetails] = useState(null);
-  const selectedShow=useSelector(state=>state.show.selectedShow)
+  const selectedShow = useSelector(state => state.show.selectedShow) || null;
+  const bookingState =useSelector(state=>state.booking)
   useEffect(() => {
-    const fetchShowDetails = async () => {
-      try {
-        const response = await axios.get(`http://localhost:7000/api/shows/${showId}`);
-        const show = response.data;
-        setShowDetails(show);
-  
-        // Initialize seats with booked status
-        initializeSeats(show.bookedSeat.map(seat => seat.seatNumber));
-      } catch (error) {
-        console.error('Error fetching show details:', error);
-      }
-    };
-  
-    const initializeSeats = (bookedSeats) => {
-      const rows = 10;
-      const seatsPerRow = 12;
-      const newSeats = [];
-      for (let row = 0; row < rows; row++) {
-        const seatRow = { row: row + 1, seats: [] };
-        for (let seat = 0; seat < seatsPerRow; seat++) {
-          const seatLabel = `${row + 1}-${seat + 1}`;
-          seatRow.seats.push({
-            label: seatLabel,
-            isAvailable: !bookedSeats.includes(seatLabel)
-          });
+    if (showId) {
+      dispatch(fetchShowData(showId));
+    }
+  }, [dispatch, showId]);
+
+  useEffect(() => {
+    if (selectedShow) {
+      const initializeSeats = (bookedSeats) => {
+        const rows = 10;
+        const seatsPerRow = 12;
+        const newSeats = [];
+        for (let row = 0; row < rows; row++) {
+          const seatRow = { row: row + 1, seats: [] };
+          for (let seat = 0; seat < seatsPerRow; seat++) {
+            const seatLabel = `${row + 1}-${seat + 1}`;
+            seatRow.seats.push({
+              label: seatLabel,
+              isAvailable: !bookedSeats.includes(seatLabel)
+            });
+          }
+          newSeats.push(seatRow);
         }
-        newSeats.push(seatRow);
+        setSeats(newSeats);
+      };
+
+      if (selectedShow.bookedSeat) {
+        initializeSeats(selectedShow.bookedSeat.map(seat => seat.seatNumber));
       }
-      setSeats(newSeats);
-    };
-  
-    fetchShowDetails();
-  }, [showId]);
-  
+    }
+  }, [selectedShow]);
 
   const handleSeatClick = (seatLabel) => {
     setSelectedSeats(prev =>
@@ -57,43 +55,36 @@ export default function BookingPage() {
   };
 
   const handleConfirmBooking = async () => {
-    const amount = selectedSeats.length * showDetails.price;
-    try {
-      await axios.post('/api/bookings', {
-        showId,
-        userId,
-        seats: selectedSeats,
-        totalPrice: amount
-      });
+    const totalPrice = selectedSeats.length * selectedShow.price
+    console.log(totalPrice,selectedSeats,showId,userId)
 
-      // Update seat availability after booking
-      setSeats(prevSeats =>
-        prevSeats.map(row => ({
-          ...row,
-          seats: row.seats.map(seat => ({
-            ...seat,
-            isAvailable: selectedSeats.includes(seat.label) ? false : seat.isAvailable
-          }))
-        }))
-      );
+    const result = await dispatch(createBooking({seats:selectedSeats,show:showId,totalPrice,userId}))
 
-      setSelectedSeats([]);
-    } catch (error) {
-      console.error('Error confirming booking:', error);
+    if(result.type ==="bookings/create/fulfilled"){
+       toast.success('Booking Successful',{
+        position: 'top-right',
+        autoClose: 5000,
+        onClose: () => dispatch(fetchShowData(showId)),
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+       })
     }
+    setSelectedSeats([])
   };
-  
-  if (!showDetails) {
+
+  if (!selectedShow) {
     return <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>Loading...</Typography>;
   }
 
   return (
     <Box sx={{ flexGrow: 1, p: 2 }}>
-      <Typography variant="h4" gutterBottom>{showDetails.movie[0].title}</Typography>
+      <Typography variant="h4" gutterBottom>{selectedShow.movie && selectedShow.movie[0] ? selectedShow.movie[0].title : 'Movie Title Not Available'}</Typography>
       <Typography
         variant="h6"
         gutterBottom
-        sx={{ textAlign: 'center', mb: 2, backgroundColor: 'skyblue', p: 1, borderRadius: 1 ,color:'white'}}
+        sx={{ textAlign: 'center', mb: 2, backgroundColor: 'skyblue', p: 1, borderRadius: 1, color: 'white' }}
       >
         <VideocamIcon sx={{ mr: 1 }} /> Screen This Side
       </Typography>
@@ -129,6 +120,7 @@ export default function BookingPage() {
       >
         Confirm Booking
       </Button>
+       <ToastContainer/>
     </Box>
   );
 }

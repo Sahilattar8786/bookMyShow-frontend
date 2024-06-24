@@ -15,32 +15,50 @@ export default function  LogIn  ()  {
    const error1=useSelector(state=>state.user.error)
    const loading=useSelector(state=>state.user.loading);
    
-   const handleLogin = (email, password) => {
+   const handleLogin =async (email, password) => {
     console.log(email, password);
-    
-    dispatch(LogInUser({email, password}))
-      .then(() => {
-        toast.success('Login Successful', {
-          position: 'top-right',
-          autoClose: 5000,
-          onClose: () => navigate('/movie'),
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      })
-      .catch(() => {
-        toast.error('Login Failed', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
+    if(!email && !password){
+        toast.warning('Please Enter Email and Password',{
+            position: 'top-right',
+            autoClose: 5000,
+            onClose: () => navigate('/movie'),
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        })
+    }else{
+        try{
+            const result = await dispatch(LogInUser({email,password}))
+            if(result.type === "user/login/fulfilled"){
+                toast.success("Login Successfull",{
+                    position: 'top-right',
+                    autoClose: 5000,
+                    onClose: () => navigate('/movie'),
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+              
+            }else if (result.type ==="user/login/rejected"){
+                toast.error('Login Failed',{
+                    position: 'top-right',
+                    autoClose: 5000,
+                    onClose: () => navigate('/movie'),
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+            }
+        }catch(error){
+            toast.error(error.message)
+        }
+    }
+   
+
+
   };
   
     return (

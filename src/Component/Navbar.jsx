@@ -28,8 +28,8 @@ export default function Navbar() {
     { name: 'Show', path: 'show' },
     { name: 'Theater', path: 'theater' }
   ];
-  const settings = ['Profile', 'My Tickets', ];
- 
+
+  const settings =[{ name:'Profile',path:'profile'},{name:'My Tickets', path:"myTicket"}]
   const navigate=useNavigate();
 
   return (
@@ -154,8 +154,8 @@ export default function Navbar() {
               onClose={handleCloseUserMenu}
               >
                 {settings.map((setting)=>(
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                     <Typography textAlign='center'>{setting}</Typography>
+                  <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                     <Typography textAlign='center' onClick={()=>navigate(`/${setting.path}`)}>{setting.name}</Typography>
                   </MenuItem>
                 ))}
                  <MenuItem key="">
