@@ -7,7 +7,7 @@ import { toast,ToastContainer} from 'react-toastify';
 
 const TicketsList = () => {
     const userId = useSelector(state => state.user.data._id);
-    const ticketData = useSelector(state => state.booking.booking) || []; // Default to empty array if null
+    const ticketData = useSelector(state => state.booking.booking); // Default to empty array if null
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -30,6 +30,7 @@ const TicketsList = () => {
             })
         }
     };
+    console.log(userId);
 
     return (
         <Box sx={{ padding: 3 }}>

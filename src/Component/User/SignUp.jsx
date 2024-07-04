@@ -4,64 +4,64 @@ import {
   TextField,
   Typography,
   Stack,
-  Button
-} from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import InputAdornment from "@mui/material/InputAdornment";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { toast } from "react-toastify";
-export default function SignUp() {
+  Button,
+  Experimental_CssVarsProvider
+} from '@mui/material';
+import React from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import InputAdornment from '@mui/material/InputAdornment';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { toast ,ToastContainer } from 'react-toastify';
+import { SignUp } from '../../app/Slice/userSlice';
+
+
+export default function SignUpComponent() {
   const dispatch = useDispatch();
+  const navigate=useNavigate();
   const initialValue = {
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phoneNo: "",
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phoneNo: '',
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("Name is Required"),
+    name: Yup.string().required('Name is Required'),
     email: Yup.string()
-      .email("Invalid Email Format")
-      .required("Email is Required"),
+      .email('Invalid Email Format')
+      .required('Email is Required'),
     password: Yup.string()
-      .min(4, "Password should be at least 6 character")
-      .required("Password is required"),
+      .min(6, 'Password should be at least 6 characters')
+      .required('Password is required'),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Password must match")
-      .required("Confirm Password is Required"),
+      .oneOf([Yup.ref('password'), null], 'Password must match')
+      .required('Confirm Password is Required'),
     phoneNo: Yup.string()
-      .matches(/^[0-9]{10}$/, "Phone Number Must be Exactly 10 digits")
-      .required("Phone Number Is Required"),
+      .matches(/^[0-9]{10}$/, 'Phone Number Must be Exactly 10 digits')
+      .required('Phone Number Is Required'),
   });
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
-    dispatch(SignUp(values)).then(()=>{
-      toast.success('Sign Up Successfull',{
-        position:'top-right',
-        autoClose:1000
-      })
-    })
-    .catch((error)=>{
-      toast.error(error,{
-        position:'top-right',
-        autoClose:1000
-      })
-    })
-    setSubmitting(false)
+  const handleSubmit =async (values, { setSubmitting }) => {
+    const result=await dispatch(SignUp(values))
+    if(result.type==='user/signup/fulfilled'){
+       toast.success('User Created Succesfully')
+       navigate('/')
+    }else{
+       toast.error('SignUp Failed')
+    }
+    setSubmitting(false);
   };
+
   return (
     <Box
       display="flex"
       alignItems="center"
       justifyContent="center"
       height="100vh"
-      sx={{ backgroundColor: "#f5f5f5" }}
+      sx={{ backgroundColor: '#f5f5f5' }}
     >
       <Paper
         elevation={3}
@@ -69,9 +69,9 @@ export default function SignUp() {
           p: 4,
           borderRadius: 2,
           width: 400,
-          "&:hover": {
-            transform: "scale(1.05)",
-            transition: "transform 0.3s ease-in-out",
+          '&:hover': {
+            transform: 'scale(1.05)',
+            transition: 'transform 0.3s ease-in-out',
           },
         }}
       >
@@ -102,7 +102,7 @@ export default function SignUp() {
                 <ErrorMessage
                   name="name"
                   component="div"
-                  style={{ color: "red" }}
+                  style={{ color: 'red' }}
                 ></ErrorMessage>
                 <Field name="email">
                   {({ field }) => (
@@ -119,7 +119,7 @@ export default function SignUp() {
                 <ErrorMessage
                   name="email"
                   component="div"
-                  style={{ color: "red" }}
+                  style={{ color: 'red' }}
                 ></ErrorMessage>
                 <Field name="password">
                   {({ field }) => (
@@ -137,9 +137,7 @@ export default function SignUp() {
                 <ErrorMessage
                   name="password"
                   component="div"
-                  style={{
-                    color: "red",
-                  }}
+                  style={{ color: 'red' }}
                 ></ErrorMessage>
                 <Field name="confirmPassword">
                   {({ field }) => (
@@ -157,7 +155,7 @@ export default function SignUp() {
                 <ErrorMessage
                   name="confirmPassword"
                   component="div"
-                  style={{ color: "red" }}
+                  style={{ color: 'red' }}
                 />
                 <Field name="phoneNo">
                   {({ field }) => (
@@ -181,7 +179,7 @@ export default function SignUp() {
                 <ErrorMessage
                   name="phoneNo"
                   component="div"
-                  style={{ color: "red" }}
+                  style={{ color: 'red' }}
                 />
 
                 <Button type="submit" variant="contained" color="primary" fullWidth disabled={isSubmitting}>
@@ -198,6 +196,7 @@ export default function SignUp() {
           )}
         </Formik>
       </Paper>
+      <ToastContainer/>
     </Box>
   );
 }

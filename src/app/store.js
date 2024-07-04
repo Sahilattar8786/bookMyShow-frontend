@@ -4,6 +4,7 @@ import movieSlice from "./Slice/movieSlice";
 import showSlice from "./Slice/showSlice";
 import theatreSlice from "./Slice/theatreSlice";
 import bookingSlice from "./Slice/bookingSlice";
+import paymentSlice from "./Slice/paymentSlice";
 
 
 export const store=configureStore({
@@ -12,6 +13,7 @@ export const store=configureStore({
         movie:movieSlice,
         show:showSlice,
         theater:theatreSlice,
-        booking:bookingSlice
+        booking:bookingSlice,
+        payment:paymentSlice
     }
 })

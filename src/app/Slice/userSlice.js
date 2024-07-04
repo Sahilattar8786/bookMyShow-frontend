@@ -24,7 +24,7 @@ export const LogInUser = createAsyncThunk(
 );
 export const SignUp = createAsyncThunk(
   "user/signup",
-  async ({ name, email, pic, dob }) => {
+  async (values) => {
     try {
       const config = {
         headers: {
@@ -33,7 +33,7 @@ export const SignUp = createAsyncThunk(
       };
       const response = await axios.post(
         "http://localhost:7000/api/users/",
-        { name, email, pic, dob },
+        values,
         config
       );
       return response.data;

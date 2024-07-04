@@ -28,6 +28,7 @@ const TicketCard = ({ ticket, cancel }) => {
                 <Typography variant="body2">{`Seats: ${ticket.seats.join(', ')}`}</Typography>
                 <Typography variant="body2">{`Total Price: ₹${ticket.totalPrice}`}</Typography>
                 <Typography variant="body2">{`Booking Time: ${moment(ticket.bookingTime).format('MMMM Do YYYY, h:mm a')}`}</Typography>
+                <Typography variant='body2'>{`Payment ID :${ticket.paymentId} `}</Typography>
                 <Typography variant="body2" style={{ color: textColor }}>
                     {ticket.status}
                 </Typography>
