@@ -59,6 +59,7 @@ export default function BookingPage() {
     );
   };
 
+  // this function used for manual booking without razorpay
   const handleConfirmBooking = async () => {
     const totalPrice = selectedSeats.length * selectedShow.price
     console.log(totalPrice,selectedSeats,showId,userId)
@@ -93,6 +94,7 @@ export default function BookingPage() {
     };
     document.body.appendChild(script);
   }, []);
+  //razorpay payment function
   const handlePayment = async () => {
     const totalPrice = selectedSeats.length * selectedShow.price;
     const paymentData = { seats: selectedSeats, userId, totalPrice, show: showId };
@@ -123,7 +125,7 @@ export default function BookingPage() {
         };
         const verifyResult = await dispatch(verifyPayment(verifyData));
         if (verifyResult.type === "verify/payment/fulfilled") {
-          toast.success('Payment Successful');
+          toast.success('Payment Successful and Booking Confirmed');
           setIsPaymentSuccess(true)
         } else {
           toast.error('Payment Failed');
@@ -144,6 +146,7 @@ export default function BookingPage() {
 
     setSelectedSeats([]);
   };
+  //useEffect for after payment 
   useEffect(()=>{
     if(isPaymentSuccess){
       dispatch(fetchShowData(showId))
