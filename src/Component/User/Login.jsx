@@ -29,31 +29,28 @@ export default function  LogIn  ()  {
         })
     }else{
         try{
-            const result = await dispatch(LogInUser({email,password}))
-            if(result.type === "user/login/fulfilled"){
-                toast.success("Login Successfull",{
-                    position: 'top-right',
-                    autoClose: 5000,
-                    onClose: () => navigate('/movie'),
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                })
-              
-            }else if (result.type ==="user/login/rejected"){
-                toast.error('Login Failed',{
-                    position: 'top-right',
-                    autoClose: 5000,
-                    onClose: () => navigate('/movie'),
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                })
-            }
+            const result = await dispatch(LogInUser({email,password})).unwrap()
+            console.log(result)
+
+            toast.success("Login Successfull",{
+                position: 'top-center',
+                autoClose: 5000,
+                onClose: () => navigate(result.isAdmin ? '/admin' : '/movie'),
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
         }catch(error){
-            toast.error(error.message)
+            toast.error(`${error.error}`,{
+                position: 'top-center',
+                autoClose: 5000,
+                onClose: () => navigate('/'),
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
         }
     }
    

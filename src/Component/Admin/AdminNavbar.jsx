@@ -5,7 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-export default function Navbar() {
+export default function AdminNavbar() {
   const [anchorElNav,setAnchorElNav]=useState(null);
   const [anchorElUser,setAnchorElUser]=useState(null);
   const userInfo=useSelector(state=>state.user.data);
@@ -24,17 +24,14 @@ export default function Navbar() {
   }
   // const pages = ['Movies', 'Theater', 'Shows'];
   const pages = [
-    { name: "Movies", path: 'movie' },
-    { name: 'Show', path: 'show' },
-    { name: 'Theater', path: 'theater' }
+    { name: "Movies", path: 'admin/movie' },
+    { name: 'Show', path: 'admin/show' },
+    { name: 'Theater', path: 'admin/theater' }
   ];
 
   const settings =[{ name:'Profile',path:'profile'},{name:'My Tickets', path:"myTicket"}]
   const navigate=useNavigate();
-  const LogOutHandler=()=>{
-    localStorage.removeItem('token');
-    window.location.reload();
-  }
+
   return (
     <AppBar position='static'>
       <Container maxWidth='xl'>
@@ -162,7 +159,7 @@ export default function Navbar() {
                   </MenuItem>
                 ))}
                  <MenuItem key="">
-                  <Typography textAlign='center'onClick={()=>LogOutHandler()}>
+                  <Typography textAlign='center'>
                      Logout
                   </Typography>
                  </MenuItem>

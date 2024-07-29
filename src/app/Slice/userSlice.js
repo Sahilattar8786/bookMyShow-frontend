@@ -15,7 +15,9 @@ export const LogInUser = createAsyncThunk(
         { email, password },
         config
       );
+      localStorage.setItem('token', response.data.token);
       return response.data;
+    
     } catch (error) {
       // If the API call fails, include the error message in the rejected action payload
       return rejectWithValue(error.response.data);

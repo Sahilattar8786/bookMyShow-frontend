@@ -45,14 +45,30 @@ export default function SignUpComponent() {
   });
 
   const handleSubmit =async (values, { setSubmitting }) => {
-    const result=await dispatch(SignUp(values))
-    if(result.type==='user/signup/fulfilled'){
-       toast.success('User Created Succesfully')
-       navigate('/')
-    }else{
-       toast.error('SignUp Failed')
-    }
-    setSubmitting(false);
+    // const result=await dispatch(SignUp(values))
+      try{
+         await dispatch(SignUp(values)).unwrap();
+         toast.success('User Created Successfully ..!',{
+           position: 'top-center',
+           autoClose: 5000,
+           onClose: () => navigate('/'),
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+         })
+         setSubmitting(false);
+      }catch(error){
+        toast.error('SignUp Failed' ,{
+          position: 'top-center',
+          autoClose: 5000,
+          // onClose: () => setSubmitting(false),
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        })
+        console.error(error)
+        return;
+      }
   };
 
   return (

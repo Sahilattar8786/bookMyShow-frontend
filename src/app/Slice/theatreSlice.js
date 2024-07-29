@@ -53,6 +53,61 @@ export const searchTheatre=createAsyncThunk(
     }
 )
 
+export const addTheatre=createAsyncThunk(
+    'add/theatre',async(theaterData,{rejectWithValue})=>{
+        try{
+            const token=localStorage.getItem('token')
+            const config={
+                headers:{
+                    'Content-Type':'application/json',
+                    'Authorization':`Bearer ${token}`
+                }
+            }
+            const response= await axios.post('http://localhost:7000/api/theater',theaterData,config);
+            return response.data;
+        }
+        catch(error){
+            return rejectWithValue(error.response.data);
+        }
+    }
+)
+export const updateTheatre=createAsyncThunk(
+    'update/theatre',async({id,theaterData},{rejectWithValue})=>{
+        try{
+            const token=localStorage.getItem('token')
+            const config={
+                headers:{
+                    'Content-Type':'application/json',
+                    'Authorization':`Bearer ${token}`
+                }
+            }
+            const response= await axios.put(`http://localhost:7000/api/theater/${id}`,theaterData,config);
+            return response.data;
+        }
+        catch(error){
+            return rejectWithValue(error.response.data);
+        }
+    }
+)
+
+export const deleteTheatre=createAsyncThunk(
+    'delete/theatre',async(id,{rejectWithValue})=>{
+        try{
+            const token=localStorage.getItem('token')
+            const config={
+                headers:{
+                    'Content-Type':'application/json',
+                    'Authorization':`Bearer ${token}`
+                }
+            }
+            const response= await axios.delete(`http://localhost:7000/api/theater/${id}`,config);
+            return response.data;
+        }
+        catch(error){
+            return rejectWithValue(error.response.data);
+        }
+    }
+)
 const initialState={
     loading:false,
     theatres:[],
@@ -65,6 +120,7 @@ const theatreSlice=createSlice({
     initialState:initialState,
     extraReducers:(builder)=>{
         builder
+        //fetch Theatre
         .addCase(fetchTheatre.pending,(state)=>{
             state.loading=true;
         })
@@ -78,6 +134,7 @@ const theatreSlice=createSlice({
             state.theatres=[];
             state.error=action.payload;
         })
+        //FetchShowDetails By Theatre
         .addCase(fetchShowDeatailByTheatre.pending,(state)=>{
             state.loading=true;
         })
@@ -91,6 +148,46 @@ const theatreSlice=createSlice({
             state.selectedTheatre=[];
             state.error=action.payload || 'something error' ;
         })
+        //Add Theatre
+        .addCase(addTheatre.pending,(state) => {
+            state.loading = true;
+          })
+        .addCase(addTheatre.fulfilled, (state, action) => {
+            state.loading = false;
+            // state.theatres.push(action.payload);
+            state.error = "";
+          })
+        .addCase(addTheatre.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload || 'Something went wrong';
+          })
+          //delete theatre 
+        .addCase(deleteTheatre.pending,(state)=>{
+            state.loading=true;
+          })
+        .addCase(deleteTheatre.fulfilled,(state)=>{
+            state.loading=false;
+            // state.theatres=state.theatres.filter(theatre=>theatre._id!==action.payload);
+            state.error=""
+        })
+        .addCase(deleteTheatre.rejected,(state,action)=>{
+            state.loading=false;
+            state.error=action.payload || 'Something went wrong';
+        })
+        //update theatre 
+        .addCase(updateTheatre.pending,(state)=>{
+            state.loading=true;
+        })
+        .addCase(updateTheatre.fulfilled,(state)=>{
+            state.loading=false;
+            // state.theatres=state.theatres.map(theatre=>theatre._id===action.payload._id? action.payload : theatre);
+            state.error=""
+        })
+        .addCase(updateTheatre.rejected,(state,action)=>{
+            state.loading=false;
+            state.error=action.payload || 'Something went wrong';
+        })
+
     }
 
 })

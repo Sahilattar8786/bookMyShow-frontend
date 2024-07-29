@@ -9,6 +9,8 @@ const Protect = ({ children }) => {
       return <Navigate to="/" />;
    }
 
+   
+
    return <>{children}</>; // Render children components
 }
 
